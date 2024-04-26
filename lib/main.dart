@@ -1,12 +1,3 @@
-//THIS IS A TEST
-//TEST
-//TEST/
-//TEST
-
-
-
-
-
 import 'package:flutter/material.dart';
 
 void main() {
@@ -21,7 +12,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-       
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
