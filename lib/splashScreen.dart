@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:project_2/login.dart';
 
-
 class SplashScreen extends StatefulWidget {
   SplashScreen({Key? key}) : super(key: key);
 
@@ -25,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen>
 
   @override
   void dispose() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
     super.dispose();
   }
 
@@ -36,7 +36,7 @@ class _SplashScreenState extends State<SplashScreen>
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.teal, Colors.black],
+            colors: [Color.fromARGB(255, 238, 6, 230), Colors.black],
             begin: Alignment.topRight,
             end: Alignment.bottomLeft,
           ),
@@ -45,11 +45,19 @@ class _SplashScreenState extends State<SplashScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Text Messager',
+              'Welcome to VisioVibe',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 35,
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Roboto', // Example of custom font family
+                letterSpacing: 2.0, // Increase letter spacing
               ),
+            ),
+            SizedBox(height: 20), // Add some space below the text
+            CircularProgressIndicator(
+              // Add a loading indicator
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
           ],
         ),

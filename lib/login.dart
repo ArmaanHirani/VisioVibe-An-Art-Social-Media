@@ -12,42 +12,45 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
-  
-  void _login(BuildContext context) async {
 
-  try {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => homepage()),
-    );
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Login failed: $e')),
-    );
+  void _login(BuildContext context) async {
+    try {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => homepage()),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $e')),
+      );
+    }
   }
-}
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login Page"),
-        backgroundColor: Colors.blue,
-      ),
+      appBar: null,
       body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.purpleAccent, Colors.white],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
         child: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 100),
-                Text(
-                "Task Manager",
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 100),
+              Text(
+                "VisioVibe",
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 36, // Increased font size
                   fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 100),
-                TextField(
+              TextField(
                 controller: _emailTextController,
                 decoration: InputDecoration(
                   labelText: "Enter Email",
@@ -74,10 +77,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 onPressed: () {
                   _login(context);
                 },
-                child: Text("Login"),
+                child: Text("Login", style: TextStyle(color: Colors.white)),
                 style: ButtonStyle(
-                  minimumSize: MaterialStateProperty.all(Size(double.infinity, 50)),
-                  backgroundColor: MaterialStateProperty.all(Colors.green),
+                  minimumSize:
+                      MaterialStateProperty.all(Size(double.infinity, 50)),
+                  backgroundColor: MaterialStateProperty.all(Colors.purple),
                 ),
               ),
               SizedBox(height: 20),
@@ -94,7 +98,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     child: Text(
                       " Sign Up",
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(255, 255, 6, 60)),
                     ),
                   ),
                 ],
