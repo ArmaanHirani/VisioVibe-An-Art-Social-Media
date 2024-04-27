@@ -3,17 +3,53 @@ import 'package:project_2/chat.dart';
 import 'package:project_2/profile.dart';
 import 'package:project_2/search.dart';
 
-class homepage extends StatelessWidget {
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'VisioVibe',
+      home: homepage(),
+    );
+  }
+}
+
+class homepage extends StatefulWidget {
+  @override
+  _homepageState createState() => _homepageState();
+}
+
+class _homepageState extends State<homepage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.purple,
         title: Center(
-          child: Text("HOMEPAGE"),
+          child: Text(
+            "HOMEPAGE",
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
-      body: Center(
-        child: Text("Welcome to Homepage"),
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.purpleAccent, Colors.deepPurple],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+        ),
+        child: Center(
+          child: Text("Welcome to Homepage"),
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
