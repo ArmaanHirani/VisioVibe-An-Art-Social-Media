@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -9,6 +10,9 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
 
@@ -17,9 +21,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       String email = _emailTextController.text.trim();
       String password = _passwordTextController.text.trim();
 
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
+      );
+
+      // Add email to Firestore
+      await _firestore.collection('users').doc(result.user!.uid).set({
+        'email': email,
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Sign up successful')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
