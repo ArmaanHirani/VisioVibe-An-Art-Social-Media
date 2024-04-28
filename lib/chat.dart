@@ -16,10 +16,22 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Chat"),
+        title: Text(
+          "Chat",
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 178, 9, 229),
       ),
       body: StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection('users').doc(_auth.currentUser!.uid).collection('friends').snapshots(),
+        stream: _firestore
+            .collection('users')
+            .doc(_auth.currentUser!.uid)
+            .collection('friends')
+            .snapshots(),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -35,7 +47,23 @@ class _ChatPageState extends State<ChatPage> {
               final DocumentSnapshot friend = friends[index];
 
               return ListTile(
-                title: Text(friend['email']),
+                leading: CircleAvatar(
+                  backgroundColor: const Color.fromARGB(255, 156, 33, 243),
+                  child: Text(
+                    friend['email']![0],
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                title: Text(
+                  friend['email'],
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 onTap: () {
                   Navigator.push(
                     context,
