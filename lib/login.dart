@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_2/homepage.dart';
 import 'signUpScreen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,18 +14,34 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController _passwordTextController = TextEditingController();
   TextEditingController _emailTextController = TextEditingController();
 
-  void _login(BuildContext context) async {
-    try {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => homepage()),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: $e')),
-      );
-    }
+ void _login(BuildContext context) async {
+  String email = _emailTextController.text.trim();
+  String password = _passwordTextController.text.trim();
+
+  if (email.isEmpty || password.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Please enter your email and password')),
+    );
+    return;
   }
+
+  try {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+
+    // If sign in is successful, navigate to the homepage
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => homepage()),
+    );
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Login failed: $e')),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
