@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_2/login.dart';
 
+
 class ProfilePage extends StatefulWidget {
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -79,7 +80,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Future<void> _uploadImage() async {
     final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile!= null) {
+    if (pickedFile != null) {
       final File imageFile = File(pickedFile.path);
 
       // Upload image to Firebase Storage
@@ -88,13 +89,35 @@ class _ProfilePageState extends State<ProfilePage> {
 
       if (snapshot.state == TaskState.success) {
         String imageUrl = await snapshot.ref.getDownloadURL();
-        await _addImageToFirestore(imageUrl);
+
+        // Add image metadata to Firestore
+        await _firestore.collection('images').add({
+          'imageUrl': imageUrl,
+          'email': _email,
+          'timestamp': Timestamp.fromDate(DateTime.now()),
+        });
+
+        // Add image to user_images collection
+        await _addImageToUserImages(imageUrl);
+
         setState(() {
           _imageUrls.add(imageUrl);
         });
       } else {
         print('Error uploading image');
       }
+    }
+  }
+
+  Future<void> _addImageToUserImages(String imageUrl) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('user_images').doc(user.uid).collection('images').add({
+        'imageUrl': imageUrl,
+        'timestamp': Timestamp.fromDate(DateTime.now()),
+      });
+    } else {
+      print('No user logged in');
     }
   }
 
