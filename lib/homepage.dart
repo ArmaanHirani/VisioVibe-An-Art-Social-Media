@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_2/chat.dart';
 import 'package:project_2/profile.dart';
 import 'package:project_2/search.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() {
   runApp(MyApp());
@@ -23,6 +24,22 @@ class homepage extends StatefulWidget {
 }
 
 class _homepageState extends State<homepage> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  List<QueryDocumentSnapshot> _images = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchImages();
+  }
+
+  Future<void> _fetchImages() async {
+    QuerySnapshot snapshot = await _firestore.collection('images').orderBy('timestamp', descending: true).get();
+    setState(() {
+      _images = snapshot.docs;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,17 +56,26 @@ class _homepageState extends State<homepage> {
           ),
         ),
       ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.purpleAccent, Colors.deepPurple],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+      body: GridView.builder(
+        itemCount: _images.length,
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1,
         ),
-        child: Center(
-          child: Text("Welcome to Homepage"),
-        ),
+        itemBuilder: (context, index) {
+          return Column(
+            children: [
+              Image.network(
+                _images[index]['imageUrl'],
+                fit: BoxFit.cover,
+              ),
+              Text(
+                _images[index]['email'],
+                style: TextStyle(fontSize: 12),
+              ),
+            ],
+          );
+        },
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
